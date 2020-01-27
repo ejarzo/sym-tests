@@ -68,5 +68,8 @@ test("Can save project with deleted shape", async () => {
     ".ant-popover.ant-popover-placement-rightTop .ant-btn.ant-btn-primary"
   );
 
+  await page.waitForSelector(".ant-message-success");
+  await page.waitFor(1000);
+
   await browser.close();
 }, 20000);
