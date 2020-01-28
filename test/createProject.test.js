@@ -4,7 +4,10 @@ require("dotenv").config();
 const { URL, USERNAME, PASSWORD, NETLIFY_URL } = process.env;
 
 test("Can save project with deleted shape", async () => {
-  const browser = await puppeteer.launch({ headless: false, sloMo: 200 });
+  const browser = await puppeteer.launch({
+    headless: false,
+    sloMo: 200
+  });
   const page = await browser.newPage();
 
   await page.setViewport({ width: 1000, height: 700 });
@@ -39,9 +42,9 @@ test("Can save project with deleted shape", async () => {
   // click delete shape
   await page.waitForSelector(".styles_deleteButton__3KBR3");
   await page.click(".styles_deleteButton__3KBR3");
-  await page.click("#SaveButton");
 
-  // const now = new Date();
+  // Save project ==========
+  await page.click("#SaveButton");
   await page.keyboard.type(" by Puppeteer");
   await page.keyboard.down("Enter");
 
@@ -70,6 +73,43 @@ test("Can save project with deleted shape", async () => {
 
   await page.waitForSelector(".ant-message-success");
   await page.waitFor(1000);
+
+  // click "Edit Tool"
+  await page.mouse.click(210, 55);
+
+  // click shape
+  await page.mouse.click(375, 245);
+
+  // click color panel
+  await page.waitForSelector(".styles_colorPickerContainer__3R7zN");
+  await page.click(".styles_colorPickerContainer__3R7zN");
+
+  // click purple
+  await page.waitForSelector(".github-picker");
+  await page.click(".github-picker span:nth-of-type(3)");
+
+  // drag shape
+  await page.mouse.move(370, 240);
+  await page.mouse.down();
+  await page.mouse.move(390, 290);
+  await page.mouse.up();
+
+  // Save again
+  await page.click("#SaveButton");
+  await page.waitFor(1000);
+
+  await page.waitForSelector(
+    ".ant-popover:not(.ant-popover-hidden) .ant-btn.ant-btn-primary"
+  );
+  await page.click(
+    ".ant-popover:not(.ant-popover-hidden) .ant-btn.ant-btn-primary"
+  );
+
+  await page.waitForSelector(".ant-message-success");
+  await page.waitFor(1000);
+
+  // await page.waitFor(1000);
+  // await page.waitForSelector("nothing");
 
   await browser.close();
 }, 20000);
